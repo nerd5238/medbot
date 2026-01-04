@@ -37,14 +37,11 @@ A modern, AI-powered clinic management system designed for dental clinics. Featu
 
 ## 🖼️ Screenshots
 
-### Patient Chatbot Interface
-![Chatbot](outputscreenshots/1.png)
+![Chatbot](output_screenshots/1.png)
 
-### Manual Booking Form
-![Booking Form](output screenshots/3.png)
+![Booking Form](output_screenshots/3.png)
 
-### Doctor Dashboard
-![Doctor Dashboard](output screenshots/4.png)
+![Doctor Dashboard](output_screenshots/4.png)
 
 ---
 
@@ -60,7 +57,7 @@ A modern, AI-powered clinic management system designed for dental clinics. Featu
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/YOUR-USERNAME/medbot-clinic-management.git
+git clone https://github.com/nerd5238/medbot-clinic-management.git
 cd medbot-clinic-management
 ```
 
