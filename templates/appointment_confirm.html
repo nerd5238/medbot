@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="confirm-container">
+
+    <h2 class="title">Appointment Confirmation</h2>
+
+    <div class="card">
+        <p><strong>Patient:</strong> {{ patient_name }}</p>
+        <p><strong>Date:</strong> {{ date }}</p>
+        <p><strong>Slot:</strong> {{ slot }}</p>
+        <p><strong>Doctor:</strong> Dr. {{ doctor_name }}</p>
+
+        <p class="note">
+            Your appointment request has been received.  
+            You will get an email / notification once the doctor approves it.
+        </p>
+    </div>
+
+    <div class="actions">
+        <a href="{{ url_for('home') }}" class="btn-primary">Go to Home</a>
+        <a href="{{ url_for('login') }}" class="btn-secondary">Login</a>
+    </div>
+
+</div>
+
+<style>
+.confirm-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.card p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.note {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #555;
+}
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #2a7ae4;
+    color: white;
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+</style>
+
+{% endblock %}

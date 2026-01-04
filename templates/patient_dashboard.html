@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+
+    <h2 class="page-title">Your Dashboard</h2>
+
+    <p class="welcome-text">
+        Welcome, {{ session['username'] }} 👋  
+        <br>Your upcoming appointments are listed below.
+    </p>
+
+    {% if appointments|length == 0 %}
+        <div class="empty-box">
+            <p>No appointments scheduled yet.</p>
+            <p>Use MedBot 💬 to book one!</p>
+        </div>
+    {% else %}
+
+    <div class="appointment-list">
+        {% for a in appointments %}
+        <div class="appointment-card">
+
+            <h3 class="appointment-title">
+                Appointment #{{ loop.revindex }}
+            </h3>
+
+            <p>
+                <strong>Date:</strong>
+                {{ a.appointment_date.strftime('%d %b %Y') }}
+            </p>
+
+            <p>
+                <strong>Time:</strong>
+                {{ a.appointment_time.strftime('%I:%M %p') }}
+            </p>
+
+            {% if a.procedure %}
+            <p>
+                <strong>Procedure:</strong>
+                {{ a.procedure }}
+            </p>
+            {% endif %}
+
+            <p>
+                <strong>Status:</strong>
+                {% if a.status == 'pending' %}
+                    <span class="status pending">Pending</span>
+                {% elif a.status == 'approved' %}
+                    <span class="status approved">Approved</span>
+                {% else %}
+                    <span class="status rejected">Rejected</span>
+                {% endif %}
+            </p>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+.dashboard-container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.welcome-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.empty-box {
+    background: #f7f7f7;
+    padding: 25px;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.appointment-list {
+    margin-top: 25px;
+}
+
+.appointment-card {
+    border: 1px solid #ddd;
+    padding: 18px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.appointment-title {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+}
+
+.status.pending { background: #e6b800; }
+.status.approved { background: #4CAF50; }
+.status.rejected { background: #d9534f; }
+</style>
+
+{% endblock %}

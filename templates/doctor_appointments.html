@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+
+    <h1 class="dash-title">All Appointments</h1>
+    <p class="dash-subtitle">Filter and review all appointment records</p>
+
+    <!-- FILTER BAR -->
+    <form method="GET" class="filter-section">
+        <label for="filter">Filter by:</label>
+        <select name="filter" id="filter" onchange="this.form.submit()">
+            <option value="all" {% if filter=='all' %}selected{% endif %}>All</option>
+            <option value="today" {% if filter=='today' %}selected{% endif %}>Today</option>
+            <option value="upcoming" {% if filter=='upcoming' %}selected{% endif %}>Upcoming</option>
+            <option value="completed" {% if filter=='completed' %}selected{% endif %}>Completed</option>
+            <option value="cancelled" {% if filter=='cancelled' %}selected{% endif %}>Cancelled / Rejected</option>
+        </select>
+    </form>
+
+    <div class="card">
+
+        {% if appointments|length == 0 %}
+            <p>No appointments found for this filter.</p>
+        {% else %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td>{{ appt.id }}</td>
+                    <td>{{ appt.patient.name }}</td>
+                    <td>{{ appt.appointment_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ appt.appointment_time.strftime('%I:%M %p') }}</td>
+                    <td>
+                        <span class="status {{ appt.status }}">
+                            {{ appt.status.capitalize() }}
+                        </span>
+                    </td>
+                    <td>{{ appt.source }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+    </div>
+
+    <div class="bottom-actions">
+        <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-back">⬅ Back to Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+    </div>
+
+</div>
+
+{% endblock %}

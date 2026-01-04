@@ -1,0 +1,41 @@
+<!-- ================= CHATBOT POPUP ================= -->
+<div id="chatbot-box" class="chatbot-box hidden">
+    <!-- Header -->
+    <div class="chatbot-header">
+        <span class="chatbot-title">MedBot Assistant</span>
+        <div>
+            <button id="chatbot-dark-toggle" title="Toggle Dark Mode">🌙</button>
+            <button id="chatbot-close" class="chatbot-close" title="Close Chat">&times;</button>
+        </div>
+    </div>
+    
+    <!-- Messages Area -->
+    <div id="chatbot-messages" class="chatbot-messages">
+        <!-- Messages dynamically appear here -->
+    </div>
+    
+    <!-- Quick Replies (Optional - can be populated dynamically) -->
+    <div id="quick-replies" class="quick-replies" style="display: none;">
+        <!-- Quick reply buttons will be added here by JS -->
+    </div>
+    
+    <!-- Input Area -->
+    <div class="chatbot-input-area">
+        <input 
+            type="text" 
+            id="chatbot-input" 
+            placeholder="Type your message..." 
+            autocomplete="off"
+            aria-label="Message input"
+        >
+        <button id="chatbot-send" aria-label="Send message">
+            Send
+            <!-- Or use an icon: ➤ or 📤 -->
+        </button>
+    </div>
+</div>
+
+<!-- ================= FLOATING BUTTON ================= -->
+<button id="chatbot-open" class="chatbot-float" aria-label="Open chatbot">
+    💬
+</button>

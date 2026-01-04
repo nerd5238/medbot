@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Approved</title>
+</head>
+<body style="font-family: Arial, sans-serif; background:#f5f5f5; padding:20px;">
+
+<div style="max-width:600px; margin:auto; background:white; padding:25px; border-radius:8px;">
+    <h2 style="color:#27ae60;">Your Appointment Has Been Approved</h2>
+
+    <p>Dear {{ name }},</p>
+
+    <p>
+        Great news! Your appointment has been <b>approved</b>.
+    </p>
+
+    <p style="font-size:16px;">
+        <b>Date:</b> {{ date }} <br>
+        <b>Time Slot:</b> {{ time_slot }}
+    </p>
+
+    <p>
+        Please arrive 10 minutes earlier for a smooth check-in process.
+    </p>
+
+    <p style="margin-top:30px;">
+        Regards,<br>
+        <b>MedBot Smart Dental Clinic</b>
+    </p>
+</div>
+
+</body>
+</html>

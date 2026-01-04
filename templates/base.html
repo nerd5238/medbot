@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MedBot Clinic</title>
+
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- CHATBOT CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+
+    <!-- CHATBOT JS -->
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" class="logo-img">
+            <span class="logo-text">MedBot Clinic</span>
+        </div>
+
+        <div class="nav-right">
+
+            {% if session.get("user_id") %}
+
+                {% if session.get("role") == "patient" %}
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="/patient/dashboard">Dashboard</a>
+		    <a href="/book-appointment">Book an appointment</a>	
+                {% elif session.get("role") == "doctor" %}
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="/doctor_dashboard">Doctor Dashboard</a>
+                {% endif %}
+
+                <a href="/logout">Logout</a>
+
+            {% else %}
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="javascript:void(0)" onclick="openLoginModal()">Login</a>
+                <a href="{{ url_for('signup') }}">Sign Up</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+    <!-- ================= PAGE CONTENT ================= -->
+    <div class="page-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- ================= CHATBOT (Patients Only) ================= -->
+    {% if session.get("role") == "patient" %}
+        {% include "chatbot_window.html" %}
+    {% endif %}
+
+    <!-- ================= LOGIN MODAL ================= -->
+    <div id="loginModal" class="modal-overlay">
+
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+
+            <h2 class="modal-title">Login</h2>
+
+            {% if login_error %}
+                <p class="error-msg">{{ login_error }}</p>
+            {% endif %}
+
+            <form action="/login" method="POST">
+                <label>Username</label>
+                <input type="text" name="username" required class="modal-input">
+
+                <label>Password</label>
+                <input type="password" name="password" required class="modal-input">
+
+                <button type="submit" class="modal-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= SHOW MODAL ON FAILED LOGIN ================= -->
+    {% if open_login %}
+    <script>
+        document.getElementById("loginModal").classList.add("active");
+    </script>
+    {% endif %}
+
+    <!-- ================= MODAL JS ================= -->
+    <script>
+    function openLoginModal() {
+        document.getElementById("loginModal").classList.add("active");
+    }
+    function closeLoginModal() {
+        document.getElementById("loginModal").classList.remove("active");
+    }
+    </script>
+
+</body>
+</html>

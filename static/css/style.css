@@ -1,0 +1,585 @@
+/* NAVBAR LOGO FIX */
+.navbar .logo-img {
+    height: 42px;
+    width: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+    object-fit: contain;
+    border-radius: 6px;
+}
+.navbar .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* GLOBAL BODY */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+/* NAVBAR */
+.navbar {
+    background: #007bff;
+    color: white;
+    padding: 14px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 14px;
+    font-weight: 500;
+}
+.page-container {
+    padding: 40px;
+}
+/* HOME PAGE */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 0;
+}
+.hero-text {
+    width: 50%;
+}
+.hero-text h1 {
+    font-size: 38px;
+    font-weight: 600;
+}
+.hero-text p {
+    font-size: 18px;
+    color: #444;
+}
+.hero-image img {
+    width: 350px;
+    border-radius: 12px;
+}
+.info-section, .services {
+    margin-top: 40px;
+}
+.services ul {
+    font-size: 18px;
+    line-height: 30px;
+}
+/* AUTH FORMS */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+.auth-card {
+    width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+.auth-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.btn-auth {
+    width: 100%;
+    padding: 12px;
+    background: #1e88e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+/* ERROR */
+.error-msg {
+    padding: 10px;
+    background: #ffdfdf;
+    border-radius: 6px;
+    color: #b40000;
+    text-align: center;
+}
+/* MODAL OVERLAY (FIXED) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+}
+/* When active → show modal */
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-box {
+    background: white;
+    width: 380px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    position: relative;
+}
+.modal-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+}
+.modal-btn {
+    padding: 12px;
+    width: 100%;
+    background: #1e88e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.modal-btn:hover {
+    background: #1976d2;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* ================================
+   DASHBOARD COMPONENTS
+================================ */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.dash-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.dash-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 20px 0;
+}
+
+/* ================================
+   TABLE STYLES
+================================ */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.styled-table thead tr {
+    background: linear-gradient(135deg, #007bff, #0056d2);
+    color: white;
+    text-align: left;
+    font-weight: 600;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 14px 16px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.styled-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.styled-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ================================
+   STATUS BADGES
+================================ */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-emergency {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-cancelled {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+/* ================================
+   ACTION BUTTONS IN TABLE
+================================ */
+.action-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.action-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.approve-btn {
+    background: #28a745;
+    color: white;
+}
+
+.approve-btn:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.reject-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.reject-btn:hover:not(:disabled) {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.action-completed {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* ================================
+   NOTIFICATION TOAST
+================================ */
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    background: #28a745;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 10000;
+    max-width: 350px;
+}
+
+.notification-toast.show {
+    transform: translateX(0);
+}
+
+.notification-toast.error {
+    background: #dc3545;
+}
+
+/* ================================
+   BOTTOM ACTIONS
+================================ */
+.bottom-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-emergency {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-emergency:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-back {
+    background: #007bff;
+    color: white;
+}
+
+.btn-back:hover {
+    background: #0056d2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-logout {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-logout:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* ================================
+   REJECTION MODAL SPECIFIC
+================================ */
+.rejection-modal {
+    max-width: 500px;
+}
+
+.reject-confirm-btn {
+    background: #dc3545;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.reject-confirm-btn:hover {
+    background: #c82333;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    flex: 1;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+}
+
+.modal-box h2 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 22px;
+}
+
+.modal-box p {
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.modal-box select {
+    margin-bottom: 0;
+}
+
+/* ================================
+   FILTER SECTION
+================================ */
+.filter-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-section label {
+    font-weight: 600;
+    color: #333;
+}
+
+.filter-section select {
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filter-section select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 20px 15px;
+    }
+    
+    .dash-title {
+        font-size: 24px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .action-cell {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .action-btn {
+        width: 100%;
+    }
+    
+    .bottom-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .styled-table {
+        font-size: 12px;
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .styled-table th,
+    .styled-table td {
+        padding: 10px 8px;
+    }
+    
+    .notification-toast {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .modal-box {
+        width: 90%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-container {
+        padding: 20px;
+    }
+    
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-text {
+        width: 100%;
+    }
+    
+    .hero-image img {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 20px;
+    }
+    
+    .auth-card {
+        width: 100%;
+    }
+    
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-section select {
+        width: 100%;
+    }
+}

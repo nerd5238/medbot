@@ -1,0 +1,98 @@
+{
+  "greeting": [
+    "Hello {{name}}! 😊 How can I help you today?",
+    "Hi {{name}} 👋 I’m here to help with anything clinic-related.",
+    "Hey {{name}}! 🦷 What brings you in today?"
+  ],
+
+  "help": [
+    "I can help you book appointments, check availability, or answer questions about the clinic 😊",
+    "You can ask me about appointments, timings, services, or anything clinic-related."
+  ],
+
+  "general": [
+    "I’m listening 😊 Tell me what’s on your mind.",
+    "No worries, take your time. How can I help?",
+    "You can ask me anything related to the clinic."
+  ],
+
+  "clinic_info": [
+    "🏥 *MedBot Dental Clinic*\n\n🦷 Services:\n{{services}}\n\n🕘 Timings:\n{{timings}}\n\n👨‍⚕️ Doctor:\n{{doctor}}\n\nLet me know if you’d like to book an appointment 😊"
+  ],
+
+  "status_none": [
+    "You don’t have any appointments yet 😊",
+    "Looks like you haven’t booked an appointment so far."
+  ],
+
+  "status_found": [
+    "Here’s your appointment 👇\n\n📅 {{date}}\n🕒 {{time}}\n🦷 {{procedure}}\n📌 Status: {{status}}"
+  ],
+
+  "ask_reason": [
+    "Sure 😊 What is the reason for your visit?",
+    "Tell me what you’re visiting for (checkup, cleaning, pain, etc.)"
+  ],
+
+  "invalid_reason": [
+    "I couldn’t identify the treatment 🤔 Could you please describe it a bit more?",
+    "Please mention something like checkup, cleaning, pain, or extraction."
+  ],
+
+  "ask_date": [
+    "Great 👍 Please enter a date (YYYY-MM-DD)",
+    "When would you like to visit? (YYYY-MM-DD)"
+  ],
+
+  "invalid_date": [
+    "That date doesn’t look right 📅 Please use YYYY-MM-DD format."
+  ],
+
+  "no_slots": [
+    "Sorry 😞 No slots are available on that date.",
+    "It looks fully booked that day. Let’s try another date."
+  ],
+
+  "ask_time": [
+    "Here are the available times ⏰\n{{slots}}\n\nPlease choose one.",
+    "These slots are available:\n{{slots}}\n\nWhich one works for you?"
+  ],
+
+  "invalid_time": [
+    "That time doesn’t look valid ⏰ Please try again.",
+    "Please enter a valid time like 10:00 or 10 AM."
+  ],
+
+  "ask_secret": [
+    "🔐 Please enter your 4-digit secret key to confirm.",
+    "To proceed, enter your 4-digit secret key."
+  ],
+
+  "wrong_secret": [
+    "That secret key doesn’t match ❌ Please try again.",
+    "Incorrect secret key 😕 Try once more."
+  ],
+
+  "too_many_attempts": [
+    "Too many incorrect attempts ❌ For security reasons, the booking was cancelled."
+  ],
+
+  "slot_conflict": [
+    "Oops 😕 That slot was just taken. Let’s try another time.",
+    "That time is no longer available. Please choose a different slot."
+  ],
+
+  "booking_success": [
+    "🎉 Your {{procedure}} appointment request is submitted!\n\n📅 {{date}}\n🕒 {{time}}\n\n📌 Status: Pending doctor approval.",
+    "All set! 🦷 I’ve requested your {{procedure}} appointment on {{date}} at {{time}}."
+  ],
+
+  "login_required": [
+    "Please log in to continue 😊"
+  ],
+
+  "fallback": [
+    "I’m here to help 😊 You can ask about appointments, availability, or the clinic.",
+    "I didn’t quite get that 🤔 Try asking something related to the clinic."
+  ]
+}

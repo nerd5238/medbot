@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="emergency-wrapper">
+    <h2 class="title">Emergency Walk-In Entry</h2>
+
+    <p class="desc">
+        Use this form to record emergency cases that require immediate attention.
+        This will automatically notify the doctor and block the nearest available slot.
+    </p>
+
+    <form method="POST" action="{{ url_for('add_emergency') }}" class="form-box">
+
+        <label>Patient Name</label>
+        <input type="text" name="name" required placeholder="Enter patient name">
+
+        <label>Email (optional)</label>
+        <input type="email" name="email" placeholder="Enter email">
+
+        <label>Contact Number</label>
+        <input type="text" name="phone" required placeholder="Enter phone number">
+
+        <label>Condition / Emergency Reason</label>
+        <textarea name="reason" required placeholder="Describe the issue"></textarea>
+
+        <label>Severity Level</label>
+        <select name="severity" required>
+            <option value="">-- Select Severity --</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Low">Low</option>
+        </select>
+
+        <button type="submit" class="submit-btn">Add Emergency Case</button>
+    </form>
+
+    <div class="back-wrapper">
+        <a href="{{ url_for('doctor_dashboard') }}" class="back-btn">⬅ Back to Dashboard</a>
+    </div>
+</div>
+
+<style>
+.emergency-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.title {
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.desc {
+    margin-top: 5px;
+    text-align: center;
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input, textarea, select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    width: 100%;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.submit-btn {
+    padding: 12px;
+    background: #c0392b;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #962d21;
+}
+
+.back-wrapper {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-btn {
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+}
+</style>
+
+{% endblock %}

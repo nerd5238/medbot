@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="slot-container">
+    <h2 class="title">Available Appointment Slots</h2>
+
+    <div class="info-box">
+        <p><strong>Date:</strong> {{ date }}</p>
+        <p><strong>Doctor:</strong> Dr. {{ doctor_name }}</p>
+        <p class="note">Select one of the available time slots below:</p>
+    </div>
+
+    <div class="slots-grid">
+        {% for slot in available_slots %}
+            <form method="POST" action="{{ url_for('confirm_slot') }}" class="slot-form">
+                <input type="hidden" name="date" value="{{ date }}">
+                <input type="hidden" name="slot" value="{{ slot }}">
+                <input type="hidden" name="patient_id" value="{{ patient_id }}">
+
+                <button type="submit" class="slot-btn">{{ slot }}</button>
+            </form>
+        {% endfor %}
+
+        {% if available_slots|length == 0 %}
+            <p class="no-slots">⚠ No slots available for this date.  
+            Please choose another date.</p>
+        {% endif %}
+    </div>
+
+    <div class="back-btn-wrapper">
+        <a href="{{ url_for('home') }}" class="btn-secondary">Back to Home</a>
+    </div>
+</div>
+
+<style>
+.slot-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.info-box {
+    background: #f2f6ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.note {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.slot-form {
+    margin: 0;
+}
+
+.slot-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2a7ae4;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.slot-btn:hover {
+    background: #1d62b6;
+}
+
+.no-slots {
+    text-align: center;
+    color: #cc0000;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.back-btn-wrapper {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.btn-secondary {
+    padding: 10px 18px;
+    background: #e0e0e0;
+    color: #333;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+</style>
+
+{% endblock %}

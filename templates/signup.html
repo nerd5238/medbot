@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-container">
+
+    <div class="auth-card">
+        <h2>Create Account</h2>
+
+        {% if error %}
+            <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('signup') }}" method="POST">
+
+            <label>Full Name</label>
+            <input type="text" name="name" required placeholder="Enter your full name">
+
+            <label>Date of Birth</label>
+            <input type="date" name="dob" required>
+
+            <label>Place</label>
+            <input type="text" name="place" required placeholder="City / Area">
+
+            <label>Email Address</label>
+            <input type="email" name="email" required placeholder="your.email@example.com">
+
+            <label>4-Digit Secret Key</label>
+            <input type="password" name="secret_key" minlength="4" maxlength="4" pattern="[0-9]{4}" required placeholder="0000">
+
+            <label>Username</label>
+            <input type="text" name="username" required placeholder="Create a username">
+
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="Enter password">
+
+            <label>Confirm Password</label>
+            <input type="password" name="confirm_password" required placeholder="Re-enter password">
+
+            <button type="submit" class="btn-auth">Sign Up</button>
+
+        </form>
+
+        <p class="signup-link">
+            Already have an account? 
+            <a href="#" onclick="openLoginModal()">Login</a>
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}

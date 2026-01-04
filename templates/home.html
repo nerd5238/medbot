@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hero fade-in">
+    <div class="hero-text">
+        <h1>Welcome to MedBot Smart Dental Clinic</h1>
+        <p>Your trusted clinic for painless and seamless dental care.</p>
+
+        {% if user %}
+            <p style="margin-top:18px; font-size:20px; color:#007bff;">
+                👋 Hello, <strong>{{ user.name }}</strong>!
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="hero-image">
+        <img src="{{ url_for('static', filename='img/doctor.png') }}" alt="Doctor">
+    </div>
+</div>
+
+<div class="info-section fade-in">
+    <h2>About Our Clinic</h2>
+    <p>
+        MedBot Clinic is powered by an AI-driven appointment engine that ensures
+        zero waiting time and instant doctor availability checks. Using our intelligent
+        chatbot, patients can book appointments anytime with real-time slot validation.
+    </p>
+</div>
+
+<div class="services fade-in">
+    <h2>Our Services</h2>
+    <ul>
+        <li>🦷 Dental Check-up</li>
+        <li>✨ Teeth Cleaning & Whitening</li>
+        <li>🛠 Root Canal Treatment (RCT)</li>
+        <li>🔧 Tooth Extraction</li>
+        <li>🚑 Emergency Walk-ins & Surgery</li>
+    </ul>
+</div>
+
+{% endblock %}

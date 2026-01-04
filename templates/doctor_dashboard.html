@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-container">
+    <h1 class="dash-title">Doctor Dashboard</h1>
+    <p class="dash-subtitle">Welcome, Dr. {{ session['username'] }}</p>
+
+    <!-- TODAY'S APPOINTMENTS -->
+    <div class="card">
+        <h2>Today's Appointments ({{ today }})</h2>
+        {% if appointments|length == 0 %}
+            <p>No appointments scheduled for today.</p>
+        {% else %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td>{{ appt.id }}</td>
+                    <td>{{ appt.patient.name }}</td>
+                    <td>{{ appt.appointment_time.strftime('%I:%M %p') }}</td>
+                    <td>
+                        <span class="status-badge status-{{ appt.status }}">
+                            {{ appt.status.capitalize() }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <!-- UPCOMING APPOINTMENTS WITH ACTIONS -->
+    {% if upcoming_appointments and upcoming_appointments|length > 0 %}
+    <div class="card">
+        <h2>Upcoming Appointments - Pending Review</h2>
+        <table class="styled-table interactive-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Patient</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in upcoming_appointments %}
+                <tr id="appt-row-{{ appt.id }}">
+                    <td>{{ appt.appointment_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ appt.appointment_time.strftime('%I:%M %p') }}</td>
+                    <td>
+                        <strong>{{ appt.patient.name }}</strong><br>
+                        <small style="color: #666;">{{ appt.patient.username }}</small>
+                    </td>
+                    <td>{{ appt.reason or 'General Checkup' }}</td>
+                    <td>
+                        <span class="status-badge status-{{ appt.status }}" id="status-{{ appt.id }}">
+                            {{ appt.status.capitalize() }}
+                        </span>
+                    </td>
+                    <td class="action-cell">
+                        {% if appt.status == 'pending' %}
+                        <button 
+                            class="action-btn approve-btn" 
+                            onclick="approveAppointment({{ appt.id }})"
+                            id="approve-btn-{{ appt.id }}">
+                            ✓ Accept
+                        </button>
+                        <button 
+                            class="action-btn reject-btn" 
+                            onclick="rejectAppointment({{ appt.id }})"
+                            id="reject-btn-{{ appt.id }}">
+                            ✗ Reject
+                        </button>
+                        {% else %}
+                        <span class="action-completed">Action Taken</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- EMERGENCY CASES -->
+    <div class="card">
+        <h2>Emergency Cases</h2>
+        {% if emergencies|length == 0 %}
+            <p>No emergency cases.</p>
+        {% else %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Reported On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in emergencies %}
+                <tr>
+                    <td>{{ e.id }}</td>
+                    <td>{{ e.patient_name }}</td>
+                    <td>{{ e.created_at.strftime('%Y-%m-%d %I:%M %p') }}</td>
+                    <td>{{ e.status.capitalize() }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <div class="bottom-actions">
+        <a href="{{ url_for('add_emergency') }}" class="btn btn-emergency">+ Add Emergency Case</a>
+        <a href="{{ url_for('doctor_appointments') }}" class="btn btn-back">View All Appointments</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+    </div>
+</div>
+
+<!-- Notification Toast -->
+<div id="notification-toast" class="notification-toast"></div>
+
+<!-- Rejection Modal -->
+<div id="rejection-modal" class="modal-overlay">
+    <div class="modal-box rejection-modal">
+        <span class="close-btn" onclick="closeRejectionModal()">&times;</span>
+        <h2>Reject Appointment</h2>
+        <p>Please provide a reason for rejection:</p>
+        <select id="rejection-reason" class="modal-input">
+            <option value="Slot no longer available">Slot no longer available</option>
+            <option value="Doctor unavailable at requested time">Doctor unavailable at requested time</option>
+            <option value="Emergency booking conflict">Emergency booking conflict</option>
+            <option value="Please reschedule to another date">Please reschedule to another date</option>
+        </select>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button onclick="confirmRejection()" class="modal-btn reject-confirm-btn">Confirm Rejection</button>
+            <button onclick="closeRejectionModal()" class="modal-btn cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-emergency {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Action Buttons */
+.action-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.approve-btn {
+    background: #28a745;
+    color: white;
+}
+
+.approve-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.reject-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.reject-btn:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.action-completed {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* Notification Toast */
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    background: #28a745;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 10000;
+}
+
+.notification-toast.show {
+    transform: translateX(0);
+}
+
+.notification-toast.error {
+    background: #dc3545;
+}
+
+/* Rejection Modal */
+.rejection-modal {
+    max-width: 500px;
+}
+
+.reject-confirm-btn {
+    background: #dc3545;
+    flex: 1;
+}
+
+.reject-confirm-btn:hover {
+    background: #c82333;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    flex: 1;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+}
+
+/* Interactive Table */
+.interactive-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.interactive-table tbody tr:hover {
+    background: #f8f9fa;
+}
+</style>
+
+<script>
+let currentAppointmentId = null;
+
+function showNotification(message, isError = false) {
+    const toast = document.getElementById('notification-toast');
+    toast.textContent = message;
+    toast.classList.toggle('error', isError);
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+function approveAppointment(appointmentId) {
+    if (!confirm('Are you sure you want to approve this appointment?')) {
+        return;
+    }
+    
+    const approveBtn = document.getElementById(`approve-btn-${appointmentId}`);
+    const rejectBtn = document.getElementById(`reject-btn-${appointmentId}`);
+    
+    approveBtn.disabled = true;
+    rejectBtn.disabled = true;
+    approveBtn.textContent = 'Processing...';
+    
+    fetch(`/doctor/appointment/${appointmentId}/approve`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message);
+            
+            // Update UI
+            const statusBadge = document.getElementById(`status-${appointmentId}`);
+            statusBadge.textContent = 'Approved';
+            statusBadge.className = 'status-badge status-approved';
+            
+            // Hide buttons
+            const actionCell = approveBtn.parentElement;
+            actionCell.innerHTML = '<span class="action-completed">Approved ✓</span>';
+        } else {
+            showNotification(data.message, true);
+            approveBtn.disabled = false;
+            rejectBtn.disabled = false;
+            approveBtn.textContent = '✓ Accept';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Failed to approve appointment', true);
+        approveBtn.disabled = false;
+        rejectBtn.disabled = false;
+        approveBtn.textContent = '✓ Accept';
+    });
+}
+
+function rejectAppointment(appointmentId) {
+    currentAppointmentId = appointmentId;
+    document.getElementById('rejection-modal').classList.add('active');
+}
+
+function closeRejectionModal() {
+    document.getElementById('rejection-modal').classList.remove('active');
+    currentAppointmentId = null;
+}
+
+function confirmRejection() {
+    const reason = document.getElementById('rejection-reason').value;
+    
+    if (!currentAppointmentId) return;
+    
+    const approveBtn = document.getElementById(`approve-btn-${currentAppointmentId}`);
+    const rejectBtn = document.getElementById(`reject-btn-${currentAppointmentId}`);
+    
+    approveBtn.disabled = true;
+    rejectBtn.disabled = true;
+    rejectBtn.textContent = 'Processing...';
+    
+    fetch(`/doctor/appointment/${currentAppointmentId}/reject`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reason: reason })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message);
+            
+            // Update UI
+            const statusBadge = document.getElementById(`status-${currentAppointmentId}`);
+            statusBadge.textContent = 'Rejected';
+            statusBadge.className = 'status-badge status-rejected';
+            
+            // Hide buttons
+            const actionCell = rejectBtn.parentElement;
+            actionCell.innerHTML = '<span class="action-completed">Rejected ✗</span>';
+            
+            closeRejectionModal();
+        } else {
+            showNotification(data.message, true);
+            approveBtn.disabled = false;
+            rejectBtn.disabled = false;
+            rejectBtn.textContent = '✗ Reject';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Failed to reject appointment', true);
+        approveBtn.disabled = false;
+        rejectBtn.disabled = false;
+        rejectBtn.textContent = '✗ Reject';
+    });
+}
+</script>
+
+{% endblock %}

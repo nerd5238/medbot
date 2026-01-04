@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="booking-container">
+    <div class="booking-card">
+        <div class="booking-header">
+            <h1>📅 Book Your Appointment</h1>
+            <p>Fill in the details below to schedule your visit</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-error">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success">
+            ✅ {{ success }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('manual_booking') }}" class="booking-form" id="bookingForm">
+            
+            <!-- Patient Information -->
+            <div class="form-section">
+                <h3>👤 Patient Information</h3>
+                
+                <div class="form-group">
+                    <label for="patient_name">Full Name *</label>
+                    <input 
+                        type="text" 
+                        id="patient_name" 
+                        name="patient_name" 
+                        class="form-control"
+                        value="{{ user.name if user else '' }}"
+                        required
+                        readonly
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="patient_email">Email Address *</label>
+                    <input 
+                        type="email" 
+                        id="patient_email" 
+                        name="patient_email" 
+                        class="form-control"
+                        value="{{ user.email if user else '' }}"
+                        required
+                        readonly
+                    >
+                    <small class="form-hint">Confirmation will be sent to this email</small>
+                </div>
+            </div>
+
+            <!-- Appointment Details -->
+            <div class="form-section">
+                <h3>🩺 Appointment Details</h3>
+                
+                <div class="form-group">
+                    <label for="reason">What brings you to the clinic? *</label>
+                    <select id="reason" name="reason" class="form-control" required onchange="updateProcedure()">
+                        <option value="">-- Select a reason --</option>
+                        <option value="checkup">General Checkup / Consultation</option>
+                        <option value="cleaning">Dental Cleaning & Scaling</option>
+                        <option value="filling">Tooth Filling (Cavity)</option>
+                        <option value="extraction">Tooth Extraction</option>
+                        <option value="root_canal">Root Canal Treatment</option>
+                        <option value="emergency">Emergency (Pain/Bleeding/Swelling)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="procedure">Procedure</label>
+                    <input 
+                        type="text" 
+                        id="procedure" 
+                        name="procedure" 
+                        class="form-control"
+                        readonly
+                    >
+                    <small class="form-hint">Auto-filled based on your reason</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <input 
+                        type="number" 
+                        id="duration" 
+                        name="duration_minutes" 
+                        class="form-control"
+                        readonly
+                    >
+                </div>
+            </div>
+
+            <!-- Date & Time Selection -->
+            <div class="form-section">
+                <h3>📆 Select Date & Time</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appointment_date">Appointment Date *</label>
+                        <input 
+                            type="date" 
+                            id="appointment_date" 
+                            name="appointment_date" 
+                            class="form-control"
+                            min="{{ min_date }}"
+                            required
+                            onchange="fetchAvailableSlots()"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointment_time">Available Time Slots *</label>
+                        <select 
+                            id="appointment_time" 
+                            name="appointment_time" 
+                            class="form-control"
+                            required
+                            disabled
+                        >
+                            <option value="">-- Select date first --</option>
+                        </select>
+                        <div id="slots-loading" class="loading-spinner" style="display: none;">
+                            ⏳ Loading available slots...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification -->
+            <div class="form-section">
+                <h3>🔐 Verification</h3>
+                
+                <div class="form-group">
+                    <label for="secret_key">Secret Key *</label>
+                    <input 
+                        type="text" 
+                        id="secret_key" 
+                        name="secret_key" 
+                        class="form-control"
+                        placeholder="Enter your secret key"
+                        maxlength="10"
+                        required
+                    >
+                    <small class="form-hint">This is the secret key you created during signup</small>
+                </div>
+            </div>
+
+            <!-- Clinic Information -->
+            <div class="info-box">
+                <h4>🏥 Clinic Information</h4>
+                <p><strong>Working Hours:</strong> Monday to Saturday, 9:00 AM – 7:00 PM</p>
+                <p><strong>Lunch Break:</strong> 1:00 PM – 2:00 PM</p>
+                <p><strong>Doctor:</strong> Dr. MedBot (Dental Surgeon)</p>
+                <p><strong>Note:</strong> You will receive confirmation email once doctor approves your appointment</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    📅 Book Appointment
+                </button>
+                <a href="{{ url_for('patient_dashboard') }}" class="btn-cancel">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<style>
+/* Booking Container */
+.booking-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.booking-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.booking-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.booking-header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.booking-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Alerts */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.alert-error {
+    background: #fee;
+    color: #c33;
+    border-left: 4px solid #c33;
+}
+
+.alert-success {
+    background: #efe;
+    color: #3c3;
+    border-left: 4px solid #3c3;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 35px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.form-section h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-control:disabled,
+.form-control:readonly {
+    background: #f5f5f5;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #888;
+}
+
+/* Form Row */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Info Box */
+.info-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.info-box h4 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}
+
+.info-box p {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    text-align: center;
+    color: #007bff;
+    font-size: 13px;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-submit {
+    flex: 1;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #007bff, #0056d2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    padding: 16px 32px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .booking-card {
+        padding: 25px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-cancel {
+        order: 2;
+    }
+}
+</style>
+
+<script>
+// Procedure mapping
+const PROCEDURE_MAP = {
+    'checkup': { name: 'General Checkup', duration: 15 },
+    'cleaning': { name: 'Cleaning / Scaling', duration: 30 },
+    'filling': { name: 'Filling', duration: 30 },
+    'extraction': { name: 'Extraction', duration: 45 },
+    'root_canal': { name: 'Root Canal Treatment', duration: 60 },
+    'emergency': { name: 'Emergency Visit', duration: 30 }
+};
+
+// Update procedure and duration based on reason
+function updateProcedure() {
+    const reason = document.getElementById('reason').value;
+    const procedureInput = document.getElementById('procedure');
+    const durationInput = document.getElementById('duration');
+
+    if (reason && PROCEDURE_MAP[reason]) {
+        procedureInput.value = PROCEDURE_MAP[reason].name;
+        durationInput.value = PROCEDURE_MAP[reason].duration;
+        
+        // Refresh available slots if date is selected
+        const dateInput = document.getElementById('appointment_date');
+        if (dateInput.value) {
+            fetchAvailableSlots();
+        }
+    } else {
+        procedureInput.value = '';
+        durationInput.value = '';
+    }
+}
+
+// Fetch available slots from server
+async function fetchAvailableSlots() {
+    const dateInput = document.getElementById('appointment_date');
+    const timeSelect = document.getElementById('appointment_time');
+    const durationInput = document.getElementById('duration');
+    const loadingSpinner = document.getElementById('slots-loading');
+
+    const date = dateInput.value;
+    const duration = durationInput.value;
+
+    if (!date || !duration) {
+        timeSelect.disabled = true;
+        timeSelect.innerHTML = '<option value="">-- Select reason and date first --</option>';
+        return;
+    }
+
+    // Show loading
+    loadingSpinner.style.display = 'block';
+    timeSelect.disabled = true;
+    timeSelect.innerHTML = '<option value="">Loading...</option>';
+
+    try {
+        const response = await fetch(`/api/available-slots?date=${date}&duration=${duration}`);
+        const data = await response.json();
+
+        loadingSpinner.style.display = 'none';
+
+        if (data.success && data.slots.length > 0) {
+            timeSelect.innerHTML = '<option value="">-- Select a time slot --</option>';
+            data.slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot;
+                option.textContent = formatTime(slot);
+                timeSelect.appendChild(option);
+            });
+            timeSelect.disabled = false;
+        } else {
+            timeSelect.innerHTML = '<option value="">❌ No slots available for this date</option>';
+        }
+    } catch (error) {
+        console.error('Error fetching slots:', error);
+        loadingSpinner.style.display = 'none';
+        timeSelect.innerHTML = '<option value="">⚠️ Error loading slots</option>';
+    }
+}
+
+// Format time from 24hr to 12hr
+function formatTime(time24) {
+    const [hours, minutes] = time24.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minutes} ${ampm}`;
+}
+
+// Form validation before submit
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    const timeSelect = document.getElementById('appointment_time');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    if (!timeSelect.value) {
+        e.preventDefault();
+        alert('⚠️ Please select an available time slot');
+        return false;
+    }
+    
+    // Disable submit button to prevent double submission
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Booking...';
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Doctor Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                    <h3 class="mb-0">Doctor Profile</h3>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- Profile Picture -->
+                    <div class="text-center mb-4">
+                        <img src="{{ url_for('static', filename='img/doctor.png') }}" 
+                             class="rounded-circle shadow" 
+                             width="120" height="120" alt="Doctor">
+                    </div>
+
+                    <!-- Doctor Info -->
+                    <form method="POST" action="/doctor/profile/update">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   value="{{ doctor.name }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Specialization</label>
+                            <input type="text" class="form-control" name="specialization"
+                                   value="{{ doctor.specialization }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" class="form-control" name="email"
+                                   value="{{ doctor.email }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Phone</label>
+                            <input type="text" class="form-control" name="phone"
+                                   value="{{ doctor.phone }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Available Timings</label>
+                            <textarea class="form-control" name="timings" rows="3">{{ doctor.timings }}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-success px-4">Save Changes</button>
+                            <a href="/doctor/dashboard" class="btn btn-secondary px-4">Back</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
