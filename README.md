@@ -606,6 +606,18 @@ If you find this project useful, please consider giving it a star!
 
 <div align="center">
 
+---
+
+## ☕ Support
+
+If this project helped you or saved you time, you can support my work here:
+
+<a href="https://www.buymeacoffee.com/nerd5238" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+       alt="Buy Me A Coffee"
+       height="45">
+</a>
+
 **Made with ❤️ for healthcare professionals**
 
 [Report Bug](https://github.com/your-username/medbot-clinic-management/issues) · [Request Feature](https://github.com/your-username/medbot-clinic-management/issues) · [Documentation](https://github.com/your-username/medbot-clinic-management/wiki)
