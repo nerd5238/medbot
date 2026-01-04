@@ -37,12 +37,18 @@ A modern, AI-powered clinic management system designed for dental clinics. Featu
 
 ## 🖼️ Screenshots
 
-![Chatbot](output_screenshots/1.png)
-
-![Booking Form](output_screenshots/3.png)
-
-![Doctor Dashboard](output_screenshots/4.png)
-
+![Chatbot]
+<p align="center">
+  <img src="output screenshots/2.png" width="600">
+</p>
+![Booking Form]
+<p align="center">
+  <img src="output screenshots/3.png" width="600">
+</p>
+![Doctor Dashboard]
+<p align="center">
+  <img src="output screenshots/4.png" width="600">
+</p>
 ---
 
 ## 🚀 Quick Start
