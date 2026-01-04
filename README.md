@@ -38,7 +38,7 @@ A modern, AI-powered clinic management system designed for dental clinics. Featu
 ## 🖼️ Screenshots
 
 ### Patient Chatbot Interface
-![Chatbot](output screenshots/2.png)
+![Chatbot](outputscreenshots/1.png)
 
 ### Manual Booking Form
 ![Booking Form](output screenshots/3.png)
