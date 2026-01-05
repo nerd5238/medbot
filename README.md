@@ -566,7 +566,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Your Name**
-- GitHub: Nerd 5238 (https://github.com/your-username)
+- GitHub: Nerd 5238 (https://github.com/nerd5238)
 - Email: sriragav235@gmail.com
 - LinkedIn: Shri Ragavendra K (https://www.linkedin.com/in/shri-ragavendra-k/))
 
