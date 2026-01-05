@@ -178,6 +178,24 @@ npx flowise start
    - Add Intent Classifier
    - Configure intents: `booking`, `status`, `clinic_info`, `greeting`, `help`
    - Set response to return JSON: `{reply: "...", handoff: "none|booking|status|clinic_info"}`
+   
+## 🤖 AI Chatbot Architecture (Flowise)
+
+<p align="center">
+  <img src="output screenshots/6.png" width="800" alt="Flowise Chatflow Architecture">
+</p>
+
+**Flow Description:**
+- JSON File node provides structured clinic responses
+- Prompt Template defines assistant behavior and constraints
+- HuggingFace Chat Model handles natural language understanding
+- LLM Chain orchestrates response generation and intent handling
+- Backend logic validates and executes all database operations
+
+<p align="center">
+  <em>Intent-based chatbot architecture built using Flowise (Agentic AI)</em>
+</p>
+
 
 6. **Get API Details**
    - Click **API** button on chatflow
